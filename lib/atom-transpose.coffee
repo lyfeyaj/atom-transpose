@@ -3,13 +3,10 @@
 module.exports = AtomTranspose =
   subscriptions: null
 
-  activate: (state) ->
-    # Register command that toggles this view
-    atom.commands.add 'atom-workspace', 'atom-transpose:transpose': => @transpose()
-
   activate: ->
+    # Register command that toggles this view
     @subscriptions = new CompositeDisposable
-    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-transpose:transpose': => @transpose()
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'atom-transpose:transpose': => @transpose()
 
   deactivate: ->
     @subscriptions.dispose()
@@ -25,31 +22,30 @@ module.exports = AtomTranspose =
       selection.cursor.moveLeft()
       selection.insertText text
 
-    exchangeOrReverse = (selection) ->
+    getSelectedText = (selection) ->
       if selection.isEmpty()
-        exchange selection
-      else
-        reverseText selection
+        selection.selectWord()
+      selection.getText()
 
     if editor = atom.workspace.getActiveTextEditor()
       selections = editor.getSelections() || []
-      if selections.length == 2
-        selectionLeft = selections[0]
-        selectionRight = selections[1]
-        if selectionLeft.isEmpty() || selectionRight.isEmpty()
-          exchangeOrReverse selectionLeft
-          exchangeOrReverse selectionRight
+      # Multiple selections
+      if selections.length >= 2
+        isAllEmpty = selections.reduce((res, selection) -> res && selection.isEmpty(), true);
+        # If all selections are empty, then select words
+        if isAllEmpty
+          selections.map getSelectedText
+
+        # Else transpose them by clock order
         else
-          textLeft = selectionLeft.getText()
-          textRight = selectionRight.getText()
+          texts = selections.map getSelectedText
+          texts.push texts.shift()
+          selections.forEach (selection, i) ->
+            selection.insertText texts[i]
 
-          selectionLeft.delete()
-          selectionLeft.insertText textRight
-          selectionLeft.selectLeft(textRight.length)
-
-          selectionRight.delete()
-          selectionRight.insertText textLeft
-          selectionRight.selectLeft(textLeft.length)
+      # Single selection
       else
-        selections.forEach (selection) ->
-          exchangeOrReverse selection
+        selection = selections[0]
+        # if selection is empty, then reverse the sibling letter
+        # else reverse the whole selection
+        selection.isEmpty() ? exchange(selection) : reverseText(selection)
