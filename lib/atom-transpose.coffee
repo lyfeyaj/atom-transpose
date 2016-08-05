@@ -31,7 +31,7 @@ module.exports = AtomTranspose =
       selections = editor.getSelections() || []
       # Multiple selections
       if selections.length >= 2
-        isAllEmpty = selections.reduce((res, selection) -> res && selection.isEmpty(), true);
+        isAllEmpty = selections.reduce(((res, selection) -> res && selection.isEmpty()), true);
         # If all selections are empty, then select words
         if isAllEmpty
           selections.map getSelectedText
