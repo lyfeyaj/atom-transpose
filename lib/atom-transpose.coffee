@@ -48,4 +48,4 @@ module.exports = AtomTranspose =
         selection = selections[0]
         # if selection is empty, then reverse the sibling letter
         # else reverse the whole selection
-        selection.isEmpty() ? exchange(selection) : reverseText(selection)
+        if selection.isEmpty() then exchange(selection) else reverseText(selection)
