@@ -1,7 +1,7 @@
 {
   "name": "atom-transpose",
   "main": "./lib/atom-transpose",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Transpose your text. Behave transpose action like Sublime Text 2/3.",
   "activationCommands": {
     "atom-workspace": "atom-transpose:transpose"
