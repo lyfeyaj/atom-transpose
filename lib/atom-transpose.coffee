@@ -28,6 +28,7 @@ module.exports = AtomTranspose =
       selection.getText()
 
     if editor = atom.workspace.getActiveTextEditor()
+      checkpoint = editor.createCheckpoint()
       selections = editor.getSelections() || []
       # Multiple selections
       if selections.length >= 2
@@ -49,3 +50,5 @@ module.exports = AtomTranspose =
         # if selection is empty, then reverse the sibling letter
         # else reverse the whole selection
         if selection.isEmpty() then exchange(selection) else reverseText(selection)
+
+      editor.groupChangesSinceCheckpoint(checkpoint)
