@@ -1,4 +1,4 @@
-## 0.3.4 - Make transposition atomic, via #2
+## 0.3.5 - Make transposition atomic, via #2
 * Allow multiple selections
 * Make transposition atomic
 
