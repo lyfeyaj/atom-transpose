@@ -1,4 +1,4 @@
-Atom Transpose
+[Atom Transpose](https://atom.io/packages/atom-transpose)
 ==============
 
 Transpose your text. Behave transpose action like Sublime Text 2/3.
